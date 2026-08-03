@@ -38,14 +38,12 @@ The objective of this investigation was to analyze the packet capture, identify 
 
 **Analysis:**
 
-Used the **HTTP** filter in Wireshark and analyzed the first HTTP connection. The packet contained a GET request for a malicious file.
+Used the HTTP filter in Wireshark and analyzed the first HTTP connection. The packet contained a GET request for a malicious file.
 
 ```
 GET /incidunt-consequatur/documents.zip HTTP/1.1
 Host: attirenepal.com
 ```
-
-![HTTP Analysis](Screenshots/HTTP%20(Q1,2).png)
 
 ---
 
@@ -58,10 +56,6 @@ documents.zip
 
 Found in the HTTP packet details.
 
-*(Same screenshot as Q1)*
-
-![HTTP Analysis](Screenshots/HTTP%20(Q1,2).png)
-
 ---
 
 ## Q3. What was the domain hosting the malicious zip file?
@@ -72,8 +66,6 @@ attirenepal.com
 ```
 
 Found in the HTTP Host header.
-
-![HTTP Host](Screenshots/HTTP%20(Q3).png)
 
 ---
 
@@ -86,8 +78,6 @@ chart-1530076591.xls
 
 Used **Follow HTTP Stream** to inspect the downloaded content without downloading the file.
 
-![HTTP Stream](Screenshots/Q4.png)
-
 ---
 
 ## Q5. What was the name of the webserver of the malicious IP?
@@ -99,10 +89,6 @@ LiteSpeed
 
 Found in the HTTP stream server information.
 
-*(Same screenshot as Q4)*
-
-![HTTP Stream](Screenshots/Q4.png)
-
 ---
 
 ## Q6. What is the version of the webserver?
@@ -113,10 +99,6 @@ PHP/7.2.34
 ```
 
 Found in the same HTTP stream.
-
-*(Same screenshot as Q4)*
-
-![HTTP Stream](Screenshots/Q4.png)
 
 ---
 
@@ -132,8 +114,6 @@ new.americold.com
 
 Used DNS filtering and analyzed suspicious domain activity.
 
-![DNS Analysis](Screenshots/DNS(Q7).png)
-
 ---
 
 ## Q8. Which certificate authority issued the SSL certificate?
@@ -144,8 +124,6 @@ GoDaddy
 ```
 
 Found by analyzing HTTPS traffic and certificate information.
-
-![Certificate Analysis](Screenshots/Q8.png)
 
 ---
 
@@ -160,14 +138,6 @@ Found by analyzing HTTPS traffic and certificate information.
 
 Identified using Wireshark Conversations and verified using VirusTotal Community.
 
-### Wireshark Conversations
-
-![Conversations](Screenshots/IP%20ADDR%20(Q9,10).png)
-
-### VirusTotal Verification
-
-![VirusTotal](Screenshots/Q9,11.png)
-
 ---
 
 ## Q10. What is the Host header for the first Cobalt Strike IP?
@@ -178,8 +148,6 @@ ocsp.verisign.com
 ```
 
 Found by filtering HTTP traffic with the specific IP address.
-
-![IP Analysis](Screenshots/IP%20ADDR%20(Q9,10).png)
 
 ---
 
@@ -192,8 +160,6 @@ survmeter.live
 
 Confirmed using VirusTotal Community.
 
-![VirusTotal](Screenshots/Q9,11.png)
-
 ---
 
 ## Q12. What is the domain name for the second Cobalt Strike server?
@@ -204,10 +170,6 @@ securitybusinpuff.com
 ```
 
 Confirmed using VirusTotal Community.
-
-*(Same VirusTotal screenshot as Q11)*
-
-![VirusTotal](Screenshots/Q9,11.png)
 
 ---
 
@@ -220,8 +182,6 @@ maldivehost.net
 
 Found by analyzing post-infection HTTP traffic.
 
-![Post Infection](Screenshots/Q13.png)
-
 ---
 
 ## Q14. What are the first eleven characters sent to the malicious domain?
@@ -231,9 +191,7 @@ Found by analyzing post-infection HTTP traffic.
 zLIisQRWZI9
 ```
 
-Found using **Follow HTTP Stream**.
-
-![HTTP Stream](Screenshots/Q14.png)
+Found using Follow HTTP Stream.
 
 ---
 
@@ -246,8 +204,6 @@ Found using **Follow HTTP Stream**.
 
 Found from packet details.
 
-![Packet Length](Screenshots/Q15.png)
-
 ---
 
 ## Q16. What was the Server header for the malicious domain?
@@ -258,8 +214,6 @@ Apache/2.4.49 (cPanel) OpenSSL/1.1.1l mod_bwlimited/1.4
 ```
 
 Found through HTTP stream analysis.
-
-![Server Header](Screenshots/Q16.png)
 
 ---
 
@@ -272,10 +226,6 @@ Found through HTTP stream analysis.
 
 Found using DNS filtering and searching for the API request.
 
-*(Shown in the same screenshot as Q18.)*
-
-![DNS Query](Screenshots/Q18.png)
-
 ---
 
 ## Q18. What was the domain in the DNS query?
@@ -286,8 +236,6 @@ api.ipify.org
 ```
 
 Used for checking the victim's public IP address.
-
-![DNS Query](Screenshots/Q18.png)
 
 ---
 
@@ -300,8 +248,6 @@ farshin@mailfa.com
 
 Found by filtering SMTP traffic.
 
-![SMTP Analysis](Screenshots/Q19.png)
-
 ---
 
 ## Q20. How many SMTP packets were observed?
@@ -313,7 +259,6 @@ Found by filtering SMTP traffic.
 
 Found by applying the SMTP filter.
 
-*(No screenshot available for this question.)*
 
 # Indicators of Compromise (IOCs)
 
