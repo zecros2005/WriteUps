@@ -27,302 +27,238 @@ The objective of this investigation was to analyze the packet capture, identify 
 
 ---
 
-# Investigation Process
+# Investigation Questions & Answers
 
-## 1. Initial Malicious HTTP Connection
+## Q1. What was the date and time for the first HTTP connection to the malicious IP?
 
-### Filter Used
-
-```
-http
-```
-
-The investigation started by analyzing HTTP traffic to identify the first malicious communication.
-
-The first HTTP connection to the malicious IP occurred at:
-
+**Answer:**
 ```
 2021-09-24 16:44:38
 ```
 
-The packet contained an HTTP GET request:
+**Analysis:**
+
+Used the HTTP filter in Wireshark and analyzed the first HTTP connection. The packet contained a GET request for a malicious file.
 
 ```
-Request Method: GET
-
-Request URI:
-/incidunt-consequatur/documents.zip
-
-Request Version:
-HTTP/1.1
-
-Host:
-attirenepal.com
+GET /incidunt-consequatur/documents.zip HTTP/1.1
+Host: attirenepal.com
 ```
 
-The attacker hosted a malicious ZIP archive named:
+---
 
+## Q2. What is the name of the zip file that was downloaded?
+
+**Answer:**
 ```
 documents.zip
 ```
 
-The malicious file was downloaded from:
+Found in the HTTP packet details.
 
+---
+
+## Q3. What was the domain hosting the malicious zip file?
+
+**Answer:**
 ```
 attirenepal.com
 ```
 
-Screenshot:
-
-```
-screenshots/http-request.png
-```
+Found in the HTTP Host header.
 
 ---
 
-# 2. Malware Archive Analysis
+## Q4. What is the name of the file inside the zip file?
 
-The HTTP stream was analyzed using:
-
-```
-Follow → HTTP Stream
-```
-
-Without downloading the file, the contents of the ZIP archive were identified.
-
-The file inside the archive was:
-
+**Answer:**
 ```
 chart-1530076591.xls
 ```
 
-The web server hosting the malicious file was identified as:
+Used **Follow HTTP Stream** to inspect the downloaded content without downloading the file.
 
+---
+
+## Q5. What was the name of the webserver of the malicious IP?
+
+**Answer:**
 ```
 LiteSpeed
 ```
 
-Server version:
+Found in the HTTP stream server information.
 
+---
+
+## Q6. What is the version of the webserver?
+
+**Answer:**
 ```
 PHP/7.2.34
 ```
 
-Screenshot:
-
-```
-screenshots/http-stream.png
-```
+Found in the same HTTP stream.
 
 ---
 
-# 3. Malicious Domain Discovery
+## Q7. What were the three domains involved in malicious file downloads?
 
-DNS traffic was analyzed to identify additional domains involved in the malware campaign.
-
-### Filter Used
-
-```
-dns
-```
-
-Additional malicious domains identified:
+**Answer:**
 
 ```
 finejewels.com.au
-
 thietbiagt.com
-
 new.americold.com
 ```
 
-These domains were involved in downloading malicious files to the victim machine.
-
-Screenshot:
-
-```
-screenshots/dns-analysis.png
-```
+Used DNS filtering and analyzed suspicious domain activity.
 
 ---
 
-# 4. SSL Certificate Analysis
+## Q8. Which certificate authority issued the SSL certificate?
 
-HTTPS traffic was analyzed using:
-
-```
-tcp.port == 443
-```
-
-The SSL certificate information revealed that the certificate authority for the first malicious domain was:
-
+**Answer:**
 ```
 GoDaddy
 ```
 
+Found by analyzing HTTPS traffic and certificate information.
+
 ---
 
-# 5. Cobalt Strike Command and Control Analysis
+## Q9. What are the two Cobalt Strike server IP addresses?
 
-The Conversations feature in Wireshark was used to identify suspicious communication.
-
-Location:
-
-```
-Statistics → Conversations
-```
-
-High-volume suspicious connections were investigated and verified using VirusTotal Community data.
-
-The identified Cobalt Strike C2 servers were:
+**Answer:**
 
 ```
 185.106.96.158
-
 185.125.204.174
 ```
 
-VirusTotal confirmed these IP addresses were associated with Cobalt Strike command and control infrastructure.
-
-Associated domains:
-
-First Cobalt Strike server:
-
-```
-survmeter.live
-```
-
-Second Cobalt Strike server:
-
-```
-securitybusinpuff.com
-```
-
-Screenshots:
-
-```
-screenshots/cobaltstrike-conversations.png
-
-screenshots/virustotal-confirmation.png
-```
+Identified using Wireshark Conversations and verified using VirusTotal Community.
 
 ---
 
-# 6. Cobalt Strike Host Header Analysis
+## Q10. What is the Host header for the first Cobalt Strike IP?
 
-The first Cobalt Strike IP address was analyzed using:
-
-```
-http filter + IP address
-```
-
-The Host header identified was:
-
+**Answer:**
 ```
 ocsp.verisign.com
 ```
 
+Found by filtering HTTP traffic with the specific IP address.
+
 ---
 
-# 7. Post-Infection Traffic Analysis
+## Q11. What is the domain name for the first Cobalt Strike server?
 
-Post-infection HTTP traffic was analyzed to identify additional attacker communication.
+**Answer:**
+```
+survmeter.live
+```
 
-The malicious domain involved in post-infection traffic was:
+Confirmed using VirusTotal Community.
 
+---
+
+## Q12. What is the domain name for the second Cobalt Strike server?
+
+**Answer:**
+```
+securitybusinpuff.com
+```
+
+Confirmed using VirusTotal Community.
+
+---
+
+## Q13. What is the domain name of the post-infection traffic?
+
+**Answer:**
 ```
 maldivehost.net
 ```
 
-The victim sent data containing the following first eleven characters:
+Found by analyzing post-infection HTTP traffic.
 
+---
+
+## Q14. What are the first eleven characters sent to the malicious domain?
+
+**Answer:**
 ```
 zLIisQRWZI9
 ```
 
-The first packet sent to the C2 server had a length of:
+Found using Follow HTTP Stream.
 
+---
+
+## Q15. What was the length of the first packet sent to the C2 server?
+
+**Answer:**
 ```
-281 bytes
+281
 ```
 
-The server header identified was:
+Found from packet details.
 
+---
+
+## Q16. What was the Server header for the malicious domain?
+
+**Answer:**
 ```
 Apache/2.4.49 (cPanel) OpenSSL/1.1.1l mod_bwlimited/1.4
 ```
 
-Screenshot:
-
-```
-screenshots/post-infection-traffic.png
-```
+Found through HTTP stream analysis.
 
 ---
 
-# 8. External IP Address Discovery
+## Q17. When did the DNS query for the IP checking domain occur?
 
-The malware performed an external IP lookup using:
-
-```
-api.ipify.org
-```
-
-The DNS query occurred at:
-
+**Answer:**
 ```
 2021-09-24 17:00:04 UTC
 ```
 
-Domain:
+Found using DNS filtering and searching for the API request.
 
+---
+
+## Q18. What was the domain in the DNS query?
+
+**Answer:**
 ```
 api.ipify.org
 ```
 
-Filter used:
-
-```
-dns
-```
-
-Screenshot:
-
-```
-screenshots/ip-check-domain.png
-```
+Used for checking the victim's public IP address.
 
 ---
 
-# 9. Malspam Activity Analysis
+## Q19. What was the first MAIL FROM address observed?
 
-SMTP traffic was analyzed to identify possible malicious email activity.
-
-Filter used:
-
-```
-smtp
-```
-
-The first MAIL FROM address observed was:
-
+**Answer:**
 ```
 farshin@mailfa.com
 ```
 
-Total SMTP packets observed:
-
-```
-20 packets
-```
-
-Screenshot:
-
-```
-screenshots/smtp-analysis.png
-```
+Found by filtering SMTP traffic.
 
 ---
+
+## Q20. How many SMTP packets were observed?
+
+**Answer:**
+```
+1439
+```
+
+Found by applying the SMTP filter.
+
 
 # Indicators of Compromise (IOCs)
 
